@@ -10,7 +10,17 @@ import numpy as np
 st.image('image.jpg', use_column_width=True)
 st.title('ML Web App')
 with st.beta_expander('README'):
-    pass
+    st.markdown('''
+    #### Dataset (.csv):
+    - Algorithm work best with dataset contains **binary features** (others run well but the prediction will bad) 
+    - Record with ***NaN*** values would be removed by the algorithm
+    - Dataset should following structure (see demo dataset /data.csv):
+    - feature_0      feature_1     ....     feature_n             Target
+    - ----------       -----------     ....     -----------      -------
+    - ----------       -----------     ....     -----------      -------
+    - ----------       -----------     ....     -----------      -------
+    #### All datatype will be converted to numeric for sklearn library, click Show head data below
+    ''')
 st.sidebar.header('Panel')
 st.sidebar.write('(Please read the README first)')
 dataset = st.sidebar.file_uploader(
@@ -22,7 +32,7 @@ if dataset is not None:
 algorithm = st.sidebar.selectbox('Please select algorithm', [
                                  'Classifier', 'Regressor'])
 max_depth = st.sidebar.slider(
-    'Max depth of tree', min_value=1, max_value=10, value=3)
+    'Max depth of the tree', min_value=1, max_value=10, value=3)
 button = st.sidebar.button('Gender')
 
 
@@ -56,8 +66,8 @@ if button and df is not None:
 
     tree = buldTree(algorithm, data)
 
-    with st.beta_expander('Visualize the tree'):
-        st.write('Sometime you have to scroll down to see the tree')
-        visual_tree = export_graphviz(
-            tree, max_depth=max_depth, feature_names=feature_names, filled=True)
-        st.graphviz_chart(visual_tree)
+    st.header('Visualize the tree')
+    st.write('Sometime you have to scroll down to see the tree')
+    visual_tree = export_graphviz(
+        tree, max_depth=max_depth, feature_names=feature_names, filled=True)
+    st.graphviz_chart(visual_tree)
